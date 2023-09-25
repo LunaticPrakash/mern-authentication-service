@@ -1,7 +1,7 @@
 {
-  "name": "authentication-service",
+  "name": "auth-service-backend",
   "version": "1.0.0",
-  "description": "This is a standalone application built using MERN stack",
+  "description": "This is a standalone application built using NodeJS, Express, and MongoDB.",
   "type": "module",
   "main": "server.js",
   "scripts": {
