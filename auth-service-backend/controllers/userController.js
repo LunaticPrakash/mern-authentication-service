@@ -33,14 +33,14 @@ const loginUser = asyncHandler(async(req, res) => {
     console.log("userController,js > loginUser() req.body : ", req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
-
-    if(user && user.matchPasswords(password)){
+    console.log("user.matchPasswords(password) : ", user.matchPasswords(password));
+    if(user && (await user.matchPasswords(password))){
         generateJwtToken(res, user._id);
         res.status(200).json({
             _id:user._id,
-            firstname: firstName,
-            lastName: lastName,
-            email: email
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email
         });
         console.log("userController,js > loginUser() : User Logged In Successfully");
     }
