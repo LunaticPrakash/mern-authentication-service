@@ -30,7 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
-const loginUser = async(req, res) => {
+const loginUser = asyncHandler(async(req, res) => {
     console.log("userController,js > loginUser() req.body : ", req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
@@ -50,7 +50,7 @@ const loginUser = async(req, res) => {
         res.status(401);
         throw new Error("Invalid Email or Password!");
     }
-}
+});
 
 export {
     registerUser,
