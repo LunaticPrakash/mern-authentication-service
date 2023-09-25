@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import generateToken from "../utils/generateJwtToken.js";
 
 const registerUser = async (req, res) => {
-    console.log("userController > registerUser : ", req.body);
+    console.log("userController.js > registerUser() : ", req.body);
     const { firstName, lastName, email, password } = req.body;
     const doesUserAlreadyExists = await User.findOne({ email: email });
 
