@@ -1,7 +1,6 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import generateJwtToken from "../utils/generateJwtToken.js";
-import generateToken from "../utils/generateJwtToken.js";
 
 const registerUser = asyncHandler(async (req, res) => {
     console.log("userController.js > registerUser() req.body : ", req.body);
