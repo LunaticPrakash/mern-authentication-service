@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import generateToken from "../utils/generateJwtToken.js";
 
 const registerUser = async (req, res) => {
     console.log("userController > registerUser : ", req.body);
