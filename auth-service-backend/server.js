@@ -2,6 +2,8 @@ import express, { urlencoded } from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import userRoute from "./routes/userRoute.js"
+import { notFoundErrorMiddleware, errorHandler } from "./middlewares/errorMiddleware.js";
+
 
 dotenv.config();
 connectDB();
@@ -12,6 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use("/api/user", userRoute);
+
+app.use(notFoundErrorMiddleware);
+app.use(errorHandler);
 
 app.listen(PORT, ()=>{
     console.log(`Server started on port ${PORT}.`);
