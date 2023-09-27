@@ -54,11 +54,16 @@ const loginUser = asyncHandler(async(req, res) => {
     }
 });
 
-const getUserByEmailId = asyncHandler(async(req, res) => {
-    console.log("userController.js > getUser() req.query : ", req.query);
-    const user = await User.findOne({email:req.query.email});
-    console.log(user);
-    res.status(200).json(user);
+const getUserProfile = asyncHandler(async(req, res) => {
+    console.log("userController.js > getUserProfile() req.cookies : ", req.cookies);
+    res.json(200);
+
+});
+
+const updateUserProfile = asyncHandler(async(req, res) => {
+    console.log("userController.js > updateUserProfile() req.cookies : ", req.cookies);
+    res.json(200);
+
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
@@ -72,6 +77,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 export {
     registerUser,
     loginUser,
-    getUserByEmailId,
+    getUserProfile,
+    updateUserProfile,
     logoutUser
 }
