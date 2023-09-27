@@ -51,14 +51,15 @@ const loginUser = asyncHandler(async(req, res) => {
     }
 });
 
-const getUser = asyncHandler(async(req, res) => {
-    console.log("userController.js > getUser() req.params : ", req.params.userId);
-    const user = await User.findOne({_id:req.params.userId});
+const getUserByEmailId = asyncHandler(async(req, res) => {
+    console.log("userController.js > getUser() req.query : ", req.query);
+    const user = await User.findOne({email:req.query.email});
+    console.log(user);
     res.status(200).json(user);
 });
 
 export {
     registerUser,
     loginUser,
-    getUser
+    getUserByEmailId
 }
