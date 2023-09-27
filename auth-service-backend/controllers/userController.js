@@ -30,7 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async(req, res) => {
-    console.log("userController,js > loginUser() req.body : ", req.body);
+    console.log("userController.js > loginUser() req.body : ", req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     console.log("user.matchPasswords(password) : ", user.matchPasswords(password));
@@ -42,7 +42,7 @@ const loginUser = asyncHandler(async(req, res) => {
             lastName: user.lastName,
             email: user.email
         });
-        console.log("userController,js > loginUser() : User Logged In Successfully");
+        console.log("userController.js > loginUser() : User Logged In Successfully");
     }
     else{
         console.log("userController,js > loginUser() : User Logged In Failed");
@@ -51,7 +51,14 @@ const loginUser = asyncHandler(async(req, res) => {
     }
 });
 
+const getUser = asyncHandler(async(req, res) => {
+    console.log("userController.js > getUser() req.params : ", req.params.userId);
+    const user = await User.findOne({_id:req.params.userId});
+    res.status(200).json(user);
+});
+
 export {
     registerUser,
-    loginUser
+    loginUser,
+    getUser
 }
