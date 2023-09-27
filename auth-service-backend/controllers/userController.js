@@ -17,7 +17,7 @@ const registerUser = asyncHandler(async (req, res) => {
             firstName, lastName, email, password
         });
         if (user) {
-            generateToken(res, user._id);
+            generateJwtToken(res, user._id);
             res.status(201).json({
                 _id: user._id,
                 firstName: firstName,
@@ -26,6 +26,10 @@ const registerUser = asyncHandler(async (req, res) => {
             });
             console.log("userController.js > registerUser() : User Registered Successfully");
         }
+        else{
+            res.status(400);
+            throw new Error("Invalid user Data!");
+        }
     }
 });
 
@@ -33,7 +37,6 @@ const loginUser = asyncHandler(async(req, res) => {
     console.log("userController.js > loginUser() req.body : ", req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
-    console.log("user.matchPasswords(password) : ", user.matchPasswords(password));
     if(user && (await user.matchPasswords(password))){
         generateJwtToken(res, user._id);
         res.status(200).json({
@@ -58,8 +61,17 @@ const getUserByEmailId = asyncHandler(async(req, res) => {
     res.status(200).json(user);
 });
 
+const logoutUser = asyncHandler(async (req, res) => {
+    res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0),
+    });
+    res.status(200).json({message: "User logged out successfully!"});
+});
+
 export {
     registerUser,
     loginUser,
-    getUserByEmailId
+    getUserByEmailId,
+    logoutUser
 }
