@@ -3,7 +3,7 @@ import User from "../models/userModel.js";
 import generateJwtToken from "../utils/generateJwtToken.js";
 
 const registerUser = asyncHandler(async (req, res) => {
-    console.log("userController.js > registerUser() req.body : ", req.body);
+    console.log("userController.js > registerUser() > req.body : ", req.body);
     const { firstName, lastName, email, password } = req.body;
     const doesUserAlreadyExists = await User.findOne({ email: email });
 
@@ -34,7 +34,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async(req, res) => {
-    console.log("userController.js > loginUser() req.body : ", req.body);
+    console.log("userController.js > loginUser() > req.body : ", req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     if(user && (await user.matchPasswords(password))){
@@ -55,13 +55,13 @@ const loginUser = asyncHandler(async(req, res) => {
 });
 
 const getUserProfile = asyncHandler(async(req, res) => {
-    console.log("userController.js > getUserProfile() req.cookies : ", req.cookies);
+    console.log("userController.js > getUserProfile() > req.cookies : ", req.cookies);
     res.json(200);
 
 });
 
 const updateUserProfile = asyncHandler(async(req, res) => {
-    console.log("userController.js > updateUserProfile() req.cookies : ", req.cookies);
+    console.log("userController.js > updateUserProfile() > req.cookies : ", req.cookies);
     res.json(200);
 
 });
