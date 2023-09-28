@@ -24,45 +24,65 @@ const registerUser = asyncHandler(async (req, res) => {
                 lastName: lastName,
                 email: email
             });
-            console.log("userController.js > registerUser() : User Registered Successfully");
+            console.log("userController.js > registerUser() : User Registered Successfully! user : ", user);
         }
-        else{
+        else {
             res.status(400);
             throw new Error("Invalid user Data!");
         }
     }
 });
 
-const loginUser = asyncHandler(async(req, res) => {
+const loginUser = asyncHandler(async (req, res) => {
     console.log("userController.js > loginUser() > req.body : ", req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
-    if(user && (await user.matchPasswords(password))){
+    if (user && (await user.matchPasswords(password))) {
         generateJwtToken(res, user._id);
         res.status(200).json({
-            _id:user._id,
+            _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email
         });
-        console.log("userController.js > loginUser() : User Logged In Successfully");
+        console.log("userController.js > loginUser() : User Logged In Successfully! \n user : user");
     }
-    else{
+    else {
         console.log("userController,js > loginUser() : User Logged In Failed");
         res.status(401);
         throw new Error("Invalid Email or Password!");
     }
 });
 
-const getUserProfile = asyncHandler(async(req, res) => {
+const getUserProfile = asyncHandler(async (req, res) => {
     console.log("userController.js > getUserProfile() > req.user : ", req.user);
     res.json(req.user);
 
 });
 
-const updateUserProfile = asyncHandler(async(req, res) => {
-    console.log("userController.js > updateUserProfile() > req.cookies : ", req.cookies);
-    res.json(200);
+const updateUserProfile = asyncHandler(async (req, res) => {
+    console.log("userController.js > updateUserProfile() > req.body : ", req.body);
+    const user = await User.findById(req.user._id);
+    if (user) {
+        user.firstName = req.body.firstName || user.firstName,
+            user.lastName = req.body.lastName || user.lastName,
+            user.email = req.body.email || user.email;
+        user.password = req.body.password || user.password;
+
+        const updatedUser = await user.save();
+        console.log("userController.js > updateUserProfile() > User updated successfully!\nupdatedUser : ", updatedUser);
+        res.status(200).json({
+            _id: updatedUser._id,
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName,
+            email: updatedUser.email
+        })
+    }
+    else {
+        console.log("userController.js > updateUserProfile() > req.body : ", req.body);
+        res.status(404);
+        throw new Error("User not found!");
+    }
 
 });
 
@@ -71,7 +91,7 @@ const logoutUser = asyncHandler(async (req, res) => {
         httpOnly: true,
         expires: new Date(0),
     });
-    res.status(200).json({message: "User logged out successfully!"});
+    res.status(200).json({ message: "User logged out successfully!" });
 });
 
 export {
