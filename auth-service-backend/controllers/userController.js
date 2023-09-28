@@ -55,8 +55,8 @@ const loginUser = asyncHandler(async(req, res) => {
 });
 
 const getUserProfile = asyncHandler(async(req, res) => {
-    console.log("userController.js > getUserProfile() > req.cookies : ", req.cookies);
-    res.json(200);
+    console.log("userController.js > getUserProfile() > req.user : ", req.user);
+    res.json(req.user);
 
 });
 
