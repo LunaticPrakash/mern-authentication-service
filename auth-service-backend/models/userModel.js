@@ -19,8 +19,12 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         min:8,
-        required: true,
+        required: true
     },
+    roles:{
+        type: [String],
+        required: true,
+    }
 }, {
     timestamps: true
 });

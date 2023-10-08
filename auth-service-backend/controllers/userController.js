@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import { ROLES_LIST } from "../config/rolesList.js";
 import User from "../models/userModel.js";
 import generateJwtToken from "../utils/generateJwtToken.js";
 
@@ -13,16 +14,18 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new Error("Email already exists!");
     }
     else {
+        const roles = [ROLES_LIST.USER];
         const user = await User.create({
-            firstName, lastName, email, password
+            firstName, lastName, email, password, roles
         });
         if (user) {
-            generateJwtToken(res, user._id);
+            generateJwtToken(res, user.email, roles);
             res.status(201).json({
                 _id: user._id,
                 firstName: firstName,
                 lastName: lastName,
-                email: email
+                email: email,
+                roles: roles
             });
             console.log("userController.js > registerUser() : User Registered Successfully! user : ", user);
         }
@@ -38,14 +41,15 @@ const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     if (user && (await user.matchPasswords(password))) {
-        generateJwtToken(res, user._id);
+        generateJwtToken(res, email, user.roles);
         res.status(200).json({
             _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
-            email: user.email
+            email: user.email,
+            roles: user.roles
         });
-        console.log("userController.js > loginUser() : User Logged In Successfully! \n user : user");
+        console.log("userController.js > loginUser() : User Logged In Successfully! user : ", user);
     }
     else {
         console.log("userController,js > loginUser() : User Logged In Failed");
@@ -71,6 +75,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
         const updatedUser = await user.save();
         console.log("userController.js > updateUserProfile() > User updated successfully!\nupdatedUser : ", updatedUser);
+        if (req.body.email) {
+            generateJwtToken(res, req.body.email, user.roles);
+        }
         res.status(200).json({
             _id: updatedUser._id,
             firstName: updatedUser.firstName,

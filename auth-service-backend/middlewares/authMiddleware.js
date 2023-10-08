@@ -7,20 +7,20 @@ const protect = asyncHandler(async (req, res, next) => {
     if (token) {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = await User.findById(decoded.userId).select('-password');
-            console.log("authMiddleware.js > protect() > req.user :", req.user);
+            req.user = await User.findOne({email: decoded.UserInfo.useremail}).select('-password');
+            console.log("authMiddleware.js > protect() > User is authenticated.");
             next();
         }
         catch (error) {
             console.log("authMiddleware.js > protect() > token :", token);
             res.status(401);
-            throw new Error("Not Authorized! Invalid token.");
+            throw new Error("Not Authenticated! Invalid token.");
         }
     }
     else {
         console.log("authMiddleware.js > protect() > token :", token);
         res.status(401);
-        throw new Error("Not Authorized! Token is not available.");
+        throw new Error("Not Authenticated! Token is not available.");
     }
 });
 
