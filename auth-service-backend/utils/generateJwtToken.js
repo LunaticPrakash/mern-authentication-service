@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
+import { logEvents } from "../middlewares/loggerMiddleware.js";
 
-const generateJwtToken = (res, email, roles) => {
-    console.log("generateJwtToken.js > generateJwtToken() : Generating token with : ", {email, roles});
+const generateJwtToken = async (res, email, roles) => {
+    console.log("generateJwtToken.js > generateJwtToken() : Generating token with : ", { email, roles });
     const token = jwt.sign(
         {
             "UserInfo": {
@@ -20,6 +21,7 @@ const generateJwtToken = (res, email, roles) => {
         maxAge: 1 * 24 * 60 * 60 * 1000
     });
     console.log("generateJwtToken.js > generateJwtToken() : Token generated & set to cookies successfully");
+    await logEvents(`LOGGED IN: EMAIl=${email}`, 'userLog.log')
 }
 
 export default generateJwtToken;

@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    lastName:{
+    lastName: {
         type: String,
         require: true
     },
@@ -18,28 +18,33 @@ const userSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        min:8,
+        min: 8,
         required: true
     },
-    roles:{
-        type: [String],
+    mobileNumber: {
+        type: String,
+        required: true
+    },
+    roles: [{
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
-    }
+        ref: 'Role'
+    }]
 }, {
     timestamps: true
 });
 
-userSchema.pre('save', async function(next){
-    if(!this.isModified('password')){
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
         next();
     }
-    else{
+    else {
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
     }
 });
 
-userSchema.methods.matchPasswords = async function(enteredPassword){
+userSchema.methods.matchPasswords = async function (enteredPassword) {
     return bcrypt.compare(enteredPassword, this.password);
 }
 

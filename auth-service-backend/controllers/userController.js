@@ -1,31 +1,33 @@
 import asyncHandler from "express-async-handler";
-import { ROLES_LIST } from "../config/rolesList.js";
+import { ROLES_LIST } from "../config/rolesConfig.js";
 import User from "../models/userModel.js";
+import Role from "../models/rolesModel.js"
 import generateJwtToken from "../utils/generateJwtToken.js";
 
 const registerUser = asyncHandler(async (req, res) => {
     console.log("userController.js > registerUser() > req.body : ", req.body);
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, mobileNumber, password } = req.body;
     const doesUserAlreadyExists = await User.findOne({ email: email });
 
     if (doesUserAlreadyExists) {
         console.log("userController.js > registerUser() : User Already Exists");
-        res.status(400);
+        res.status(409);
         throw new Error("Email already exists!");
     }
     else {
-        const roles = [ROLES_LIST.USER];
+        const userRole = await Role.findOne({ roleName: "USER" })
         const user = await User.create({
-            firstName, lastName, email, password, roles
+            firstName, lastName, email, password, mobileNumber, roles: userRole
         });
         if (user) {
-            generateJwtToken(res, user.email, roles);
+            generateJwtToken(res, user.email, user.roles);
             res.status(201).json({
                 _id: user._id,
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
-                roles: roles
+                mobileNumber: mobileNumber,
+                roles: user.roles
             });
             console.log("userController.js > registerUser() : User Registered Successfully! user : ", user);
         }
@@ -47,6 +49,7 @@ const loginUser = asyncHandler(async (req, res) => {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            mobileNumber: user.mobileNumber,
             roles: user.roles
         });
         console.log("userController.js > loginUser() : User Logged In Successfully! user : ", user);
