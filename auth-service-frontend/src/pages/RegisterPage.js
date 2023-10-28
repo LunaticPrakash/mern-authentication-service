@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Col, Button, Row, Container, Form } from "react-bootstrap";
 import * as Yup from 'yup';
 import * as formik from 'formik';
 import { ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../redux/actions/userActions';
+import { getUserProfile, registerUser } from '../redux/actions/userActions';
 import { useDispatch } from 'react-redux';
+import Swal from "sweetalert2";
+import axios from 'axios';
 
 const RegisterPage = () => {
 
@@ -42,8 +44,57 @@ const RegisterPage = () => {
     });
 
     const registerFormSubmitHandler = (values) => {
-        registerUser(dispatch, values);
+        Swal.fire({
+            title: 'Registering...',
+            showCancelButton: false,
+            showConfirmButton: false
+        });
+        registerUser(dispatch, values).then((data) => {
+            if (data.type === "user/registerError") {
+                Swal.close();
+                Swal.fire({
+                    title: "Registration Failed!",
+                    text: `User is not registered yet. Error : ${data.payload.message}`,
+                    icon: "error",
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'bottom',
+                    allowEscapeKey: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+            }
+            else if (data.type === "user/registerSuccess") {
+                Swal.close();
+                Swal.fire({
+                    title: "Registeration Successfull!",
+                    text: `${data.payload.firstName} is succesfully registered.`,
+                    icon: "success",
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'bottom',
+                    allowEscapeKey: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('click', () => Swal.close())
+                    }
+                });
+                navigate("/home");
+            }
+        });
     }
+
+    useEffect(() => {
+        getUserProfile(dispatch).then((data) => {
+            if (data.type === "user/getUserProfileSuccess") {
+                navigate("/home");
+            }
+        });
+    }, []);
+
 
     return (
         <Formik
@@ -56,7 +107,6 @@ const RegisterPage = () => {
             {({ handleSubmit, handleChange, handleBlur, values, touched, errors }) => (
 
                 <Container>
-
                     <Row className="my-3 justify-content-center">
                         <Col lg={5} md={10} xs={12}>
                             <h2 className="text-center">Sign Up</h2>
@@ -132,7 +182,7 @@ const RegisterPage = () => {
                                     />
                                     <ErrorMessage name="password" component="span" className="error" />
                                 </Form.Group>
-                                <p onClick={() => { navigate("/") }} role="button" className="text-primary">Already have an account? Login Here</p>
+                                <p onClick={() => { navigate("/login") }} role="button" className="text-primary">Already have an account? Login Here</p>
                                 <Button variant="primary" type="submit">
                                     Register
                                 </Button>

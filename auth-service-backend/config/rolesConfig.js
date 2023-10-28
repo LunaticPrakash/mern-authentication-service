@@ -19,7 +19,6 @@ export const rolesInitializer = async () => {
             await Role.create(r);
         }
         else {
-            console.log(`ROLE ${r.roleName} exists in DB.`);
             const isRoleDescUpdated = rolesFromDB.find((rdb) => (rdb.roleName === r.roleName) && (rdb.roleDescription !== r.roleDescription))
             
             if (isRoleDescUpdated) {

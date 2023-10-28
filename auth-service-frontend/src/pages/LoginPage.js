@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Col, Button, Row, Container, Form } from "react-bootstrap";
 import * as Yup from 'yup';
 import * as formik from 'formik';
 import { ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import { getUserProfile, loginUser } from '../redux/actions/userActions';
+import Swal from 'sweetalert2';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 const LoginPage = () => {
+
     const { Formik } = formik;
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const initialValues = {
         email: "",
@@ -24,8 +30,56 @@ const LoginPage = () => {
     });
 
     const loginFormSubmitHandler = (values) => {
-        console.log(values);
+        Swal.fire({
+            title: 'Logging in...',
+            showCancelButton: false,
+            showConfirmButton: false
+        });
+        loginUser(dispatch, values.email, values.password).then((data) => {
+            if (data.type === "user/loginError") {
+                Swal.close();
+                Swal.fire({
+                    title: "Login Failed!",
+                    text: `User is not logged in yet. Error : ${data.payload.message}`,
+                    icon: "error",
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'bottom',
+                    allowEscapeKey: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+            }
+            else if (data.type === "user/loginSuccess") {
+                Swal.close();
+                Swal.fire({
+                    title: "Login Successfull!",
+                    text: `${data.payload.firstName} is succesfully logged in.`,
+                    icon: "success",
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'bottom',
+                    allowEscapeKey: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('click', () => Swal.close())
+                    }
+                });
+                navigate("/home");
+            }
+        });
     }
+
+    useEffect(() => {
+        getUserProfile(dispatch).then((data) => {
+            if (data.type === "user/getUserProfileSuccess") {
+                navigate("/home");
+            }
+        });
+    }, []);
 
     return (
         <Formik
@@ -70,7 +124,7 @@ const LoginPage = () => {
                                     />
                                     <ErrorMessage name="password" component="span" className="error" />
                                 </Form.Group>
-                                <p onClick={() => { navigate("/register")}} role="button" className="text-primary">Don't have an account? Register Here</p>
+                                <p onClick={() => { navigate("/register") }} role="button" className="text-primary">Don't have an account? Register Here</p>
                                 <Button variant="primary" type="submit">
                                     Login
                                 </Button>
