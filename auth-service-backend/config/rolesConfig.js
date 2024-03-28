@@ -26,10 +26,4 @@ export const rolesInitializer = async () => {
             }
         }
     });
-    rolesFromDB.map(async (rdb) => {
-        const doesRoleExistInRolesConfig = ROLES_LIST.some((r) => r.roleName === rdb.roleName)
-        if (!doesRoleExistInRolesConfig) {
-            await Role.deleteOne(rdb);
-        }
-    });
 }

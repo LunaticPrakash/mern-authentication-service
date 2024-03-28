@@ -7,7 +7,9 @@ const protect = asyncHandler(async (req, res, next) => {
     if (token) {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = await User.findOne({email: decoded.UserInfo.useremail}).select('-password');
+            req.user = await User.findOne({ email: decoded.UserInfo.useremail }).select('-password');
+            if (!req.user)
+                throw new Error("User doesn't exist in Database!");
             console.log("authMiddleware.js > protect() > User is authenticated.");
             next();
         }

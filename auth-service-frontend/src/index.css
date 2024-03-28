@@ -7,3 +7,13 @@
   font-size: 1rem;
   margin-top: 0.3rem;
 }
+
+.swal2-popup.swal2-toast {
+  padding: .5em 1em !important;
+  width: auto !important;
+  height: fit-content;
+}
+
+.swal2-popup.swal2-toast .swal2-icon {
+  margin-right: 0.5em !important;
+}

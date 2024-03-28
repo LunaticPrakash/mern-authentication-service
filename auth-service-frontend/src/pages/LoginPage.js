@@ -31,7 +31,7 @@ const LoginPage = () => {
 
     const loginFormSubmitHandler = (values) => {
         Swal.fire({
-            title: 'Logging in...',
+            title: 'Login in...',
             showCancelButton: false,
             showConfirmButton: false
         });
@@ -40,15 +40,16 @@ const LoginPage = () => {
                 Swal.close();
                 Swal.fire({
                     title: "Login Failed!",
-                    text: `User is not logged in yet. Error : ${data.payload.message}`,
+                    text: `Error: ${data.payload.message}`,
                     icon: "error",
                     showCancelButton: false,
                     showConfirmButton: false,
                     toast: true,
+                    animation: false,
                     position: 'bottom',
-                    allowEscapeKey: true,
                     timer: 3000,
                     timerProgressBar: true,
+                    closeOnCancel: true
                 });
             }
             else if (data.type === "user/loginSuccess") {
@@ -90,28 +91,29 @@ const LoginPage = () => {
             }}
         >
             {({ handleSubmit, handleChange, handleBlur, values, touched, errors }) => (
-                <Container>
+                <Container fluid>
                     <Row className="my-5 justify-content-center">
-                        <Col lg={5} md={10} xs={12}>
+                        <Col lg={5} md={7} sm={10} xs={11}>
                             <h2 className="text-center">Sign In</h2>
                             <Form noValidate onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3"
                                     controlId="formBasicEmail">
-                                    <Form.Label>Email</Form.Label>
+                                    <Form.Label className='mb-2'>Email</Form.Label>
                                     <Form.Control
-                                        type="text"
+                                        type="email"
                                         name="email"
+                                        autoComplete='off'
                                         value={values.email}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         isValid={touched.email && !errors.email}
-                                        className={errors.email && touched.email ?
-                                            "input-error" : null}
+                                        className={`${errors.email && touched.email ?
+                                            "input-error" : null} p-1`}
                                     />
                                     <ErrorMessage name="email" component="span" className="error" />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                                    <Form.Label>Password</Form.Label>
+                                    <Form.Label className='mb-2'>Password</Form.Label>
                                     <Form.Control
                                         type="password"
                                         name="password"
@@ -119,13 +121,13 @@ const LoginPage = () => {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         isValid={touched.password && !errors.password}
-                                        className={errors.password && touched.password ?
-                                            "input-error" : null}
+                                        className={`${errors.password && touched.password ?
+                                            "input-error" : null} p-1`}
                                     />
                                     <ErrorMessage name="password" component="span" className="error" />
                                 </Form.Group>
                                 <p onClick={() => { navigate("/register") }} role="button" className="text-primary">Don't have an account? Register Here</p>
-                                <Button variant="primary" type="submit">
+                                <Button variant="primary px-3 py-1 my-3" type="submit">
                                     Login
                                 </Button>
                             </Form>

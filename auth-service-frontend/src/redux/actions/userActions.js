@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getUserProfileError, getUserProfileStart, getUserProfileSuccess, loginError, loginStart, loginSuccess, registerError, registerStart, registerSuccess } from "../userSlice";
+import { getUserProfileError, getUserProfileStart, getUserProfileSuccess, loginError, loginStart, loginSuccess, logoutUserError, logoutUserStart, logoutUserSuccess, registerError, registerStart, registerSuccess } from "../userSlice";
 
 export const registerUser = async (dispatch, user) => {
     dispatch(registerStart());
@@ -30,7 +30,7 @@ export const loginUser = async (dispatch, email, password) => {
 export const getUserProfile = async (dispatch) => {
     dispatch(getUserProfileStart());
     try {
-        const res = await axios.get("http://localhost:5001/api/user/", {
+        const res = await axios.get("/api/user/", {
             withCredentials: true
         });
         console.log("getUserProfile() > res.data : ", res.data);
@@ -39,5 +39,18 @@ export const getUserProfile = async (dispatch) => {
     catch (error) {
         console.log("getUserProfile() > error.response.data : ", error.response.data);
         return dispatch(getUserProfileError(error.response.data));
+    }
+}
+
+export const logoutUser = async (dispatch) => {
+    dispatch(logoutUserStart());
+    try {
+        const res = await axios.get("/api/user/logout");
+        console.log("logoutUser() > res.data : ", res.data);
+        return dispatch(logoutUserSuccess());
+    }
+    catch (error) {
+        console.log("logoutUser() > error.response.data : ", error.response.data);
+        return dispatch(logoutUserError(error.response.data));
     }
 }

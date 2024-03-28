@@ -18,10 +18,10 @@ const generateJwtToken = async (res, email, roles) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'DEVELOPMENT' ? false : true,
         sameSite: 'strict',
-        maxAge: 1 * 24 * 60 * 60 * 1000
+        maxAge: (1) * (24) * (60) * (60) * (1000)  // (day)*(hours)*(minutes)*(seconds)*1000 milliseconds
     });
     console.log("generateJwtToken.js > generateJwtToken() : Token generated & set to cookies successfully");
-    await logEvents(`LOGGED IN: EMAIl=${email}`, 'userLog.log')
+    await logEvents(`LOGGED IN: EMAIL=${email}`, 'userLog.log')
 }
 
 export default generateJwtToken;

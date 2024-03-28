@@ -108,11 +108,11 @@ const RegisterPage = () => {
 
                 <Container>
                     <Row className="my-3 justify-content-center">
-                        <Col lg={5} md={10} xs={12}>
+                        <Col lg={5} md={7} sm={10} xs={11}>
                             <h2 className="text-center">Sign Up</h2>
                             <Form noValidate onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3" controlId="formBasicFirstName">
-                                    <Form.Label>First Name</Form.Label>
+                                    <Form.Label className='mb-2'>First Name</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="firstName"
@@ -120,13 +120,13 @@ const RegisterPage = () => {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         isValid={touched.firstName && !errors.firstName}
-                                        className={errors.firstName && touched.firstName ?
-                                            "input-error" : null}
+                                        className={`${errors.firstName && touched.firstName ?
+                                            "input-error" : null} p-1`}
                                     />
                                     <ErrorMessage name="firstName" component="span" className="error" />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formBasicLastName">
-                                    <Form.Label>Last Name</Form.Label>
+                                    <Form.Label className='mb-2'>Last Name</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="lastName"
@@ -134,28 +134,28 @@ const RegisterPage = () => {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         isValid={touched.lastName && !errors.lastName}
-                                        className={errors.lastName && touched.lastName ?
-                                            "input-error" : null}
+                                        className={`${errors.lastName && touched.lastName ?
+                                            "input-error" : null} p-1`}
                                     />
                                     <ErrorMessage name="lastName" component="span" className="error" />
                                 </Form.Group>
                                 <Form.Group className="mb-3"
                                     controlId="formBasicEmail">
-                                    <Form.Label>Email</Form.Label>
+                                    <Form.Label className='mb-2'>Email</Form.Label>
                                     <Form.Control
-                                        type="text"
+                                        type="email"
                                         name="email"
                                         value={values.email}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         isValid={touched.email && !errors.email}
-                                        className={errors.email && touched.email ?
-                                            "input-error" : null}
+                                        className={`${errors.email && touched.email ?
+                                            "input-error" : null} p-1`}
                                     />
                                     <ErrorMessage name="email" component="span" className="error" />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formBasicMobileNumber">
-                                    <Form.Label>Mobile Number</Form.Label>
+                                    <Form.Label className='mb-2'>Mobile Number</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="mobileNumber"
@@ -163,13 +163,13 @@ const RegisterPage = () => {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         isValid={touched.mobileNumber && !errors.mobileNumber}
-                                        className={errors.mobileNumber && touched.mobileNumber ?
-                                            "input-error" : null}
+                                        className={`${errors.mobileNumber && touched.mobileNumber ?
+                                            "input-error" : null} p-1`}
                                     />
                                     <ErrorMessage name="mobileNumber" component="span" className="error" />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                                    <Form.Label>Password</Form.Label>
+                                    <Form.Label className='mb-2'>Password</Form.Label>
                                     <Form.Control
                                         type="password"
                                         name="password"
@@ -177,13 +177,13 @@ const RegisterPage = () => {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         isValid={touched.password && !errors.password}
-                                        className={errors.password && touched.password ?
-                                            "input-error" : null}
+                                        className={`${errors.password && touched.password ?
+                                            "input-error" : null} p-1`}
                                     />
                                     <ErrorMessage name="password" component="span" className="error" />
                                 </Form.Group>
                                 <p onClick={() => { navigate("/login") }} role="button" className="text-primary">Already have an account? Login Here</p>
-                                <Button variant="primary" type="submit">
+                                <Button variant="primary px-3 py-1 my-3" type="submit">
                                     Register
                                 </Button>
                             </Form>
